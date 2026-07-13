@@ -1,0 +1,19 @@
+<% content_for :title, "People" %>
+
+<div class="page-head">
+  <h1>People</h1>
+</div>
+
+<div class="people">
+  <% @people.each do |person| %>
+    <div class="person-card" style="--chip-color: <%= person.color %>">
+      <span class="chip" style="--chip-color: <%= person.color %>"><%= person.name %></span>
+      <div class="row-actions">
+        <%= link_to "Edit", edit_person_path(person), class: "btn btn--tiny" %>
+        <% unless current_person == person %>
+          <%= button_to "This is me", identify_path(person), class: "btn btn--tiny btn--primary" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

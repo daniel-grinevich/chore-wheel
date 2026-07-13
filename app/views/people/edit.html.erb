@@ -1,0 +1,21 @@
+<% content_for :title, "Edit person" %>
+<div class="page-head"><h1>Edit <%= @person.name %></h1></div>
+
+<%= form_with model: @person, class: "form" do |f| %>
+  <% if @person.errors.any? %>
+    <div class="flash flash--alert"><%= @person.errors.full_messages.to_sentence %></div>
+  <% end %>
+
+  <label>Name
+    <%= f.text_field :name, autofocus: true %>
+  </label>
+
+  <label>Color
+    <%= f.color_field :color %>
+  </label>
+
+  <div class="form__actions">
+    <%= f.submit class: "btn btn--primary" %>
+    <%= link_to "Cancel", people_path, class: "btn btn--ghost" %>
+  </div>
+<% end %>

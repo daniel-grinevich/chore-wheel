@@ -1,0 +1,30 @@
+<%= tag.div id: dom_id(assignment), class: "card card--#{assignment.status}", style: "--chip-color: #{assignment.person.color}" do %>
+  <div class="card__top">
+    <span class="card__chore"><%= assignment.chore.name %></span>
+    <span class="badge badge--<%= assignment.chore.difficulty %>"><%= assignment.chore.difficulty %></span>
+  </div>
+
+  <div class="card__meta">
+    <span class="chip chip--sm" style="--chip-color: <%= assignment.person.color %>"><%= assignment.person.name %></span>
+    <span class="muted"><%= assignment.estimate_minutes %> min est.</span>
+  </div>
+
+  <% if assignment.done? %>
+    <div class="card__timer card__timer--done">
+      ✓ Done · took <%= format_seconds(assignment.total_seconds) %>
+    </div>
+  <% elsif assignment.timer_running? %>
+    <div class="card__timer"
+         data-controller="timer"
+         data-timer-started-at-value="<%= assignment.active_session.started_at.iso8601 %>">
+      <span class="card__clock" data-timer-target="display">00:00</span>
+    </div>
+    <%= button_to "■ Stop", stop_timer_assignment_path(assignment), class: "btn btn--danger btn--block" %>
+  <% else %>
+    <%= button_to "▶ Start", start_timer_assignment_path(assignment), class: "btn btn--primary btn--block" %>
+  <% end %>
+
+  <% unless assignment.done? %>
+    <%= button_to "↔ Swap person", reassign_assignment_path(assignment), class: "btn btn--ghost btn--tiny btn--block" %>
+  <% end %>
+<% end %>

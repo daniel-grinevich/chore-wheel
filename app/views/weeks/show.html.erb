@@ -1,0 +1,43 @@
+<% content_for :title, "Week of #{@week_start.strftime('%b %-d')}" %>
+
+<section class="weekbar">
+  <%= link_to "← Prev", week_path((@week_start - 7).iso8601), class: "btn btn--ghost" %>
+  <div class="weekbar__title">
+    <h1>Week of <%= @week_start.strftime("%B %-d, %Y") %></h1>
+    <p class="muted"><%= @week_start.strftime("%b %-d") %> – <%= (@week_start + 6).strftime("%b %-d") %></p>
+  </div>
+  <%= link_to "Next →", week_path((@week_start + 7).iso8601), class: "btn btn--ghost" %>
+</section>
+
+<section class="scoreboard">
+  <% @people.each do |person| %>
+    <div class="score" style="--chip-color: <%= person.color %>">
+      <span class="score__name"><%= person.name %></span>
+      <span class="score__minutes"><%= @minutes_by_person[person.id] %> min</span>
+    </div>
+  <% end %>
+</section>
+
+<% if @assignments.empty? %>
+  <div class="empty">
+    <p>No chores assigned for this week yet.</p>
+    <%= button_to "🎲 Generate this week", generate_week_path(@week_start.iso8601), class: "btn btn--primary" %>
+    <p class="muted">Assignments balance total minutes between everyone, using each chore's refined average time.</p>
+  </div>
+<% else %>
+  <div class="week-grid">
+    <% @days.each do |day| %>
+      <div class="day <%= "day--today" if day == Date.current %>">
+        <div class="day__header">
+          <span class="day__name"><%= day.strftime("%a") %></span>
+          <span class="day__date"><%= day.strftime("%-d") %></span>
+        </div>
+        <div class="day__cards">
+          <% Array(@assignments_by_day[day]).each do |assignment| %>
+            <%= render "assignments/card", assignment: assignment %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

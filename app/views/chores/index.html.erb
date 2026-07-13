@@ -1,0 +1,41 @@
+<% content_for :title, "Chores" %>
+
+<div class="page-head">
+  <h1>Chores</h1>
+  <%= link_to "+ New chore", new_chore_path, class: "btn btn--primary" %>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Chore</th>
+      <th>Base guess</th>
+      <th>Refined avg</th>
+      <th>Difficulty</th>
+      <th>Active</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @chores.each do |chore| %>
+      <tr class="<%= "row--inactive" unless chore.active? %>">
+        <td><%= chore.name %></td>
+        <td><%= chore.base_estimate_minutes %> min</td>
+        <td>
+          <strong><%= chore.average_minutes %> min</strong>
+          <% if chore.estimate_from_history? %>
+            <span class="tag">learned</span>
+          <% else %>
+            <span class="tag tag--muted">guess</span>
+          <% end %>
+        </td>
+        <td><span class="badge badge--<%= chore.difficulty %>"><%= chore.difficulty %></span></td>
+        <td><%= chore.active? ? "Yes" : "No" %></td>
+        <td class="row-actions">
+          <%= link_to "Edit", edit_chore_path(chore), class: "btn btn--tiny" %>
+          <%= button_to "Delete", chore_path(chore), method: :delete, class: "btn btn--tiny btn--danger", data: { turbo_confirm: "Delete #{chore.name}?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

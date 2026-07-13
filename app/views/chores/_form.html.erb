@@ -1,0 +1,23 @@
+<%= form_with model: chore, class: "form" do |f| %>
+  <% if chore.errors.any? %>
+    <div class="flash flash--alert"><%= chore.errors.full_messages.to_sentence %></div>
+  <% end %>
+
+  <label>Name
+    <%= f.text_field :name, autofocus: true %>
+  </label>
+
+  <label>Base estimate (minutes)
+    <%= f.number_field :base_estimate_minutes, min: 1 %>
+    <span class="muted">Used until real timings refine it.</span>
+  </label>
+
+  <label class="checkbox">
+    <%= f.check_box :active %> Active (include in weekly assignment)
+  </label>
+
+  <div class="form__actions">
+    <%= f.submit class: "btn btn--primary" %>
+    <%= link_to "Cancel", chores_path, class: "btn btn--ghost" %>
+  </div>
+<% end %>

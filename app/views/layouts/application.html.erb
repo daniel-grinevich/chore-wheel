@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Chore Wheel" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <header class="topbar">
+      <nav class="topbar__nav">
+        <%= link_to "🧹 Chore Wheel", root_path, class: "topbar__brand" %>
+        <%= link_to "This week", root_path, class: "topbar__link" %>
+        <%= link_to "Chores", chores_path, class: "topbar__link" %>
+        <%= link_to "People", people_path, class: "topbar__link" %>
+      </nav>
+      <div class="topbar__identity">
+        <% if current_person %>
+          <span class="chip" style="--chip-color: <%= current_person.color %>">You are <%= current_person.name %></span>
+        <% else %>
+          <span class="topbar__muted">Who are you?</span>
+        <% end %>
+        <% Person.order(:id).each do |person| %>
+          <% next if current_person == person %>
+          <%= button_to person.name, identify_path(person), class: "btn btn--tiny" %>
+        <% end %>
+      </div>
+    </header>
+
+    <% if notice %><div class="flash flash--notice"><%= notice %></div><% end %>
+    <% if alert %><div class="flash flash--alert"><%= alert %></div><% end %>
+
+    <main class="container">
+      <%= yield %>
+    </main>
+  </body>
+</html>
