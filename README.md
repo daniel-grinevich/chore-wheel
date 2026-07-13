@@ -40,7 +40,7 @@ and watch its refined average and difficulty update on the Chores page.
 Runs on the `rainbow-road` cluster the same way as `navi`: image built to GHCR by
 CI, kustomize manifests synced by ArgoCD, served privately over the tailnet.
 
-1. **Push code** to `main` → `.github/workflows/deploy.yml` builds and pushes
+1. **Push code** to `production` → `.github/workflows/deploy.yml` builds and pushes
    `ghcr.io/daniel-grinevich/chore-wheel:staging-<sha>` and `:staging-latest`.
 2. **Manifests** live in `rainbow-road/chores/{base,staging}` with an ArgoCD
    Application at `rainbow-road/argocd/applications/chores-staging.yaml`.
